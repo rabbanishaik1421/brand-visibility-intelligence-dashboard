@@ -8,3 +8,13 @@ def page_header():
         </div>
     """, unsafe_allow_html=True
     )
+
+def categorize_price_ranges(price):
+    if price <= 5000:
+        return "Budget"
+    elif price <= 20000:
+        return "Mid-Range"
+    elif price <= 50000:
+        return "Premium" 
+    else:
+        return "Luxury"

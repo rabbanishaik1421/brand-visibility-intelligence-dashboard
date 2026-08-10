@@ -4,6 +4,13 @@ import pandas as pd
 con = get_connection()
 cursor = con.cursor()
 
+'''cursor.execute(
+    """
+DROP TABLE brand_dashboard_data
+"""
+)
+'''
+
 cursor.execute(
     """
 CREATE TABLE IF NOT EXISTS brand_dashboard_data (
@@ -16,7 +23,9 @@ CREATE TABLE IF NOT EXISTS brand_dashboard_data (
     platform TEXT,
     position INTEGER,
     delivery TEXT,
-    brand TEXT
+    brand TEXT,
+    price_range TEXT,
+    visibility_score TEXT
 )
 """
 )
@@ -26,8 +35,8 @@ brand_dat = pd.read_csv("brand_cleaned_dataset.csv")
 for _,row in brand_dat.iterrows():
     cursor.execute(
         """
-        INSERT INTO brand_dashboard_data(keyword, title, price, rating, reviews, platform, position, delivery, brand) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)
-        """, (row["keyword"], row["title"], row["price"], row["rating"], row["reviews"], row["platform"], row["position"], row["delivery"], row["brand"])
+        INSERT INTO brand_dashboard_data(keyword, title, price, rating, reviews, platform, position, delivery, brand, price_range, visibility_score) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """, (row["keyword"], row["title"], row["price"], row["rating"], row["reviews"], row["platform"], row["position"], row["delivery"], row["brand"], row["price_range"], row["visibility_score"])
     )
 
 con.commit()
