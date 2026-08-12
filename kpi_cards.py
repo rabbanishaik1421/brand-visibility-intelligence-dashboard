@@ -2,11 +2,22 @@ import streamlit as st
 import pandas as pd
 
 def show_kpi_cards(df):
+    df["price"] = pd.to_numeric(
+        df["price"],
+        errors="coerce"
+    )
+
+    df["rating"] = pd.to_numeric(
+        df["rating"],
+        errors="coerce"
+    )
+        
     col1, col2, col3, col4, col5 = st.columns(5)
     with col1:
         st.metric("Total Products", len(df), border=True)
 
     with col2:
+        # print(df['price'].mean())
         st.metric("AVG Price",  f"{df['price'].mean():,.2f}", border=True)
 
     with col3:
@@ -61,13 +72,43 @@ def show_platform_analysis_kpi_cards(df):
     col1, col2, col3, col4 = st.columns(4)
 
     with col1:
-        st.metric("Total Platforms", df["platform"].dropna().count(), border=True)
+        total_platforms = df["platform"].nunique()
+        st.metric("Total Platforms", total_platforms, border=True)
 
     with col2:
-        avg_rating_by_platform = df.groupby("platform")["rating"].mean()
+        platform_data = df.dropna(
+            subset=["platform", "rating"]
+        )
+        if platform_data.empty:
+            st.metric(
+                "Best Platform (Avg Rating)",
+                "N/A"
+            )
+        else:
+            avg_rating_by_platform = (
+                platform_data
+                .groupby("platform")["rating"]
+                .mean()
+            )
+            # avg_rating_by_platform = df.groupby("platform")["rating"].mean()
 
-        best_platform = avg_rating_by_platform.idxmax()
-        st.metric("Best Platfrom", best_platform, border=True)
+            if avg_rating_by_platform.empty:
+                st.metric(
+                    "Best Platform (Avg Rating)",
+                    "N/A",
+                    border=True
+                )
+            else:
+
+                best_platform = avg_rating_by_platform.idxmax()
+                best_rating = avg_rating_by_platform.max()
+
+                st.metric(
+                    "Best Platform (Avg Rating)",
+                    best_platform,
+                    f"{best_rating:.2f}",
+                    border=True
+                )
 
 def show_visibility_ranking_kpi_cards(df):
     col1, col2, col3, col4 = st.columns(4)
