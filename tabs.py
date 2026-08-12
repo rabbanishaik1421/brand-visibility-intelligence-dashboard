@@ -1,6 +1,7 @@
 import streamlit as st
 from kpi_cards import show_kpi_cards, show_brand_kpi_cards, show_pricing_anaysis_kpi_cards, show_platform_analysis_kpi_cards, show_visibility_ranking_kpi_cards
 from common import show_products_explorer
+from charts import show_overview_charts, show_brand_v_product, show_brand_vs_averating_rating, show_top_brands_top_positions
 
 def show_tabs(df):
 
@@ -18,10 +19,25 @@ def show_tabs(df):
 
         show_kpi_cards(df)        
         # st.dataframe(df)
+        show_overview_charts(df)
 
+    # Brand insight charts
     with tab2:
         st.header("Brand Insight")
         show_brand_kpi_cards(df)
+
+        col1, col2 = st.columns(2)
+
+        with col1:
+            show_brand_v_product(df)
+
+        with col2:
+            show_brand_vs_averating_rating(df)
+
+        col3, col4 = st.columns(2)
+
+        with col3:
+            show_top_brands_top_positions(df)
 
     with tab3:
         st.header("Pricing Analysis")
