@@ -24,15 +24,38 @@ for keyword in KEYWORDS:
   data = response.json()
 
   for item in data.get("shopping_results", []):
+    original_price = item.get("price")
+    selling_price = item.get("extracted_price")
+
+    discount = None
+
+    if original_price is not None and selling_price is not None:
+      try:
+        original_price = float(
+          str(original_price)
+            .replace("$", "")
+            .replace("₹", "")
+            .replace(",", "")
+        )
+
+        selling_price = float(selling_price)
+
+        if original_price > selling_price and original_price > 0:
+          discount = ((original_price - selling_price) / original_price) * 100
+
+      except (ValueError, TypeError):
+        discount = None
+
       products.append({
-          "keyword":keyword,
-          "title":item.get("title"),
-          "price":item.get("extracted_price"),
-          "rating":item.get("rating"),
-          "reviews":item.get("reviews"),
-          "platform":item.get("source"),
-          "position":item.get("position"),
-          "delivery":item.get("delivery")
+        "keyword":keyword,
+        "title":item.get("title"),
+        "price":item.get("extracted_price"),
+        "rating":item.get("rating"),
+        "reviews":item.get("reviews"),
+        "platform":item.get("source"),
+        "position":item.get("position"),
+        "delivery":item.get("delivery"),
+        "discount": discount
       })
 
 # print(products)

@@ -1,7 +1,7 @@
 import streamlit as st
 from kpi_cards import show_kpi_cards, show_brand_kpi_cards, show_pricing_anaysis_kpi_cards, show_platform_analysis_kpi_cards, show_visibility_ranking_kpi_cards
 from common import show_products_explorer
-from charts import show_overview_charts, show_brand_v_product, show_brand_vs_averating_rating, show_top_brands_top_positions
+from charts import show_overview_charts, show_brand_v_product, show_brand_vs_averating_rating, show_top_brands_top_positions, show_pricing_analysis_price_distribution, show_platform_analysis_charts, show_visibility_ranking_charts
 
 def show_tabs(df):
 
@@ -43,13 +43,24 @@ def show_tabs(df):
         st.header("Pricing Analysis")
         show_pricing_anaysis_kpi_cards(df)
 
+        # Pricing Distribution
+        show_pricing_analysis_price_distribution(df)
+        # show_pricing_analysis_price_vs_ranking(df)
+
+    # Platform analysis tab
     with tab4:
         st.header("Platform Analysis")
         show_platform_analysis_kpi_cards(df)
+        # Platform analysis charts
+        show_platform_analysis_charts(df)
 
+    # Visibility and Ranking
     with tab5:
         st.subheader("Visibilty & Ranking")
         show_visibility_ranking_kpi_cards(df)
+
+        # Charts
+        show_visibility_ranking_charts(df)
 
     # Product Explorer tab
     with tab6:

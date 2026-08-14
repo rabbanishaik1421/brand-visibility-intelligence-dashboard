@@ -65,8 +65,30 @@ def show_pricing_anaysis_kpi_cards(df):
     with col2:
         st.metric("MAX Price", f"{df["price"].max():,.2f}", border=True)
 
-    # with col3:
-    #     st.metric("%Discounted Price", "Discounted Price", border=True)
+    # Percentage Discounted Products
+    with col3:
+
+        total_products = len(df)
+
+        discounted_products = df[
+            df["discount"].notna() &
+            (df["discount"] > 0)
+        ]
+
+        discounted_count = len(discounted_products)
+
+        if total_products == 0:
+            discount_percentage = 0
+        else:
+            discount_percentage = (
+                discounted_count / total_products
+            ) * 100
+
+        st.metric(
+            "% Discounted Products",
+            f"{discount_percentage:.2f}%",
+            border=True
+        )
 
 def show_platform_analysis_kpi_cards(df):
     col1, col2, col3, col4 = st.columns(4)
