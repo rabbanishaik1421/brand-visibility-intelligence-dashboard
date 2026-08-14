@@ -18,6 +18,7 @@ final_columns = [
     "platform",
     "position",
     "delivery",
+    "discount"
 ]
 
 # Standardize column names
@@ -31,6 +32,7 @@ api_df = api_df.rename(columns={
 
 # Add missing column to CSV dataset
 csv_df["position"] = None
+csv_df["discount"] = None
 
 # Select common columns
 csv_df = csv_df[final_columns]
